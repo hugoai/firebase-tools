@@ -24,11 +24,6 @@ var client = require("..");
 var errorOut = require("../errorOut");
 var winston = require("winston");
 var logger = require("../logger");
-var fs = require("fs");
-var fsutils = require("../fsutils");
-var path = require("path");
-var clc = require("cli-color");
-var ansiStrip = require("cli-color/strip");
 var configstore = require("../configstore");
 var _ = require("lodash");
 var args = process.argv.slice(2);
@@ -36,27 +31,13 @@ var handlePreviewToggles = require("../handlePreviewToggles");
 var utils = require("../utils");
 var cmd;
 
-var logFilename = path.join(process.cwd(), "/firebase-debug.log");
-logger
-  .add(winston.transports.Console, {
-    level: process.env.DEBUG ? "debug" : "info",
-    showLevel: false,
-    colorize: true,
-  })
-  .add(winston.transports.File, {
-    level: "debug",
-    filename: logFilename,
-    json: false,
-    formatter: function(input) {
-      input.message = ansiStrip(input.message);
-      return ["[" + input.level + "]", input.message].join(" ");
-    },
-  });
-
-var debugging = false;
+logger.add(winston.transports.Console, {
+  level: process.env.DEBUG ? "debug" : "info",
+  showLevel: false,
+  colorize: true,
+});
 if (_.includes(args, "--debug")) {
   logger.transports.console.level = "debug";
-  debugging = true;
 }
 
 logger.debug(_.repeat("-", 70));
@@ -75,9 +56,6 @@ require("../fetchMOTD")();
 
 process.on("exit", function(code) {
   code = process.exitCode || code;
-  if (!debugging && code < 2 && fsutils.fileExistsSync(logFilename)) {
-    fs.unlinkSync(logFilename);
-  }
 
   if (code > 0 && process.stdout.isTTY) {
     var lastError = configstore.get("lastError") || 0;
@@ -86,7 +64,7 @@ process.on("exit", function(code) {
       var help;
       if (code === 1 && cmd) {
         var commandName = _.get(_.last(cmd.args), "_name", "[command]");
-        help = "Having trouble? Try " + clc.bold("firebase " + commandName + " --help");
+        help = "Having trouble? Try firebase --help";
       } else {
         help = "Having trouble? Try again or contact support with contents of firebase-debug.log";
       }
