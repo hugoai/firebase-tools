@@ -52,7 +52,7 @@ var _pipeAsync = function(from, to) {
 };
 
 var _packageSource = function(options, sourceDir, configValues) {
-  var tmpFile = tmp.fileSync({ prefix: "firebase-functions-", postfix: ".zip" }).name;
+  var tmpFile = tmp.fileSync({ prefix: "/tmp/firebase-functions-", postfix: ".zip" }).name;
   var fileStream = fs.createWriteStream(tmpFile, {
     flags: "w",
     defaultEncoding: "binary",
