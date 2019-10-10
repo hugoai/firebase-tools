@@ -78,6 +78,7 @@
     "d": "^1.0.1",
     "didyoumean": "^1.2.1",
     "dotenv": "^6.1.0",
+    "event-emitter": "^0.3.5",
     "exit-code": "^1.0.2",
     "express": "^4.16.4",
     "filesize": "^3.1.3",
