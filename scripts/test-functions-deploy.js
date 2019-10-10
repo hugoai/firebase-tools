@@ -66,7 +66,7 @@ var getUuid = function() {
 };
 
 var preTest = function() {
-  var dir = tmp.dirSync({ prefix: "fntest_" });
+  var dir = tmp.dirSync({ dir: "/tmp", prefix: "fntest_" });
   tmpDir = dir.name;
   fs.copySync(projectDir, tmpDir);
   execSync("npm install", { cwd: tmpDir + "/functions" });

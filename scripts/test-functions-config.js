@@ -26,7 +26,7 @@ var projectDir = __dirname + "/test-project";
 var tmpDir;
 
 var preTest = function() {
-  var dir = tmp.dirSync({ prefix: "cfgtest_" });
+  var dir = tmp.dirSync({ dir: "/tmp", prefix: "cfgtest_" });
   tmpDir = dir.name;
   fs.copySync(projectDir, tmpDir);
   api.setRefreshToken(configstore.get("tokens").refresh_token);
